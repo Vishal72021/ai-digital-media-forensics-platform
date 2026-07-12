@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI
 
+from app.api.router import api_router
 from app.core.lifespan import lifespan
 
 APPLICATION_TITLE = "Sentinel AI"
@@ -17,5 +18,7 @@ def create_application() -> FastAPI:
         title=APPLICATION_TITLE,
         lifespan=lifespan,
     )
+
+    application.include_router(api_router)
 
     return application
