@@ -4,8 +4,11 @@ from fastapi import FastAPI
 
 from app.api.router import api_router
 from app.core.lifespan import lifespan
+from app.core.logging import configure_logging
 
 APPLICATION_TITLE = "Sentinel AI"
+APPLICATION_DESCRIPTION = "Backend API for the Sentinel AI Digital Media Forensics Platform."
+APPLICATION_VERSION = "0.1.0"
 
 
 def create_application() -> FastAPI:
@@ -14,8 +17,12 @@ def create_application() -> FastAPI:
     Returns:
         A configured FastAPI application instance.
     """
+    configure_logging()
+
     application = FastAPI(
         title=APPLICATION_TITLE,
+        description=APPLICATION_DESCRIPTION,
+        version=APPLICATION_VERSION,
         lifespan=lifespan,
     )
 
