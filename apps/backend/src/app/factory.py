@@ -2,6 +2,10 @@
 
 from fastapi import FastAPI
 
+from app.core.lifespan import lifespan
+
+APPLICATION_TITLE = "Sentinel AI"
+
 
 def create_application() -> FastAPI:
     """Create and configure the Sentinel AI FastAPI application.
@@ -9,10 +13,9 @@ def create_application() -> FastAPI:
     Returns:
         A configured FastAPI application instance.
     """
-    APPLICATION_TITLE = "Sentinel AI"
-
     application = FastAPI(
         title=APPLICATION_TITLE,
+        lifespan=lifespan,
     )
 
     return application
