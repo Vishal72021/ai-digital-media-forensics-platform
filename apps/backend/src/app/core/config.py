@@ -14,6 +14,8 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    database_url: str
+
 
 @lru_cache
 def get_settings() -> Settings:
