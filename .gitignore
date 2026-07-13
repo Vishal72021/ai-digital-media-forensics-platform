@@ -137,8 +137,8 @@ docker-compose.override.yml
 *.tflite
 *.safetensors
 
-models/
-datasets/
+/models/
+/datasets/
 
 # ------------------------------------------------------------------------------
 # Temporary Files
