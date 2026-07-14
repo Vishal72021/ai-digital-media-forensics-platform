@@ -1,16 +1,26 @@
 # MR-0003 Review
 
+## Milestone
+
+Persistence Foundation
+
 ## Status
 
-Approved
+✅ Approved
 
-## Scope
+---
+
+## Scope Completed
 
 - Persistence Infrastructure
-- ORM Foundation
+- SQLAlchemy Configuration
 - Alembic Integration
-- Domain Model
+- Initial Database Schema
+- Domain Model Foundation
 - Repository Layer
+- Service Layer
+
+---
 
 ## Validation
 
@@ -18,25 +28,51 @@ Approved
 - [x] MyPy
 - [x] Pre-commit
 - [x] Alembic
-- [x] SQLAlchemy
+- [x] PostgreSQL Connectivity
+
+---
 
 ## Architectural Decisions
+
+### Persistence
 
 - SQLAlchemy 2.x
 - PostgreSQL
 - Alembic
 - UUID Primary Keys
-- Repository Pattern
-- Constructor Injection
-- No Repository-owned Transactions
+- UTC Timestamps
 
-## Technical Debt
+### Repository
 
-None
+- One repository per aggregate
+- Constructor injection
+- No transaction ownership
 
-## Future Considerations
+### Service
 
-- Service Layer
+- Transaction ownership
+- Repository orchestration
+- No direct SQL execution
+
+---
+
+## Deferred Decisions
+
 - Dependency Injection
 - Unit of Work
-- Repository Helper Utilities
+- Domain Events
+- Repository Base Class
+- Service Base Class
+- Exception Hierarchy
+
+---
+
+## Risks
+
+None identified.
+
+---
+
+## Outcome
+
+MR-0003 establishes the persistence and application service foundations for Sentinel AI. Future milestones can focus on business capabilities without revisiting infrastructure concerns.
