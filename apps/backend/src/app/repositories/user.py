@@ -80,3 +80,15 @@ class UserRepository:
         """
         self._session.delete(user)
         self._session.flush()
+
+    def commit(self) -> None:
+        """Commit the current transaction."""
+        self._session.commit()
+
+    def rollback(self) -> None:
+        """Roll back the current transaction."""
+        self._session.rollback()
+
+    def flush(self) -> None:
+        """Flush pending changes to the database."""
+        self._session.flush()

@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from sqlalchemy.orm import Session
-
 from app.models.user import User
 from app.repositories.user import UserRepository
 
@@ -13,19 +11,13 @@ from app.repositories.user import UserRepository
 class UserService:
     """Service responsible for user-related business operations."""
 
-    def __init__(
-        self,
-        session: Session,
-        repository: UserRepository | None = None,
-    ) -> None:
+    def __init__(self, repository: UserRepository) -> None:
         """Initialize the user service.
 
         Args:
-            session: SQLAlchemy database session.
-            repository: Optional repository implementation.
+            repository: Repository used for user persistence operations.
         """
-        self._session = session
-        self._repository = repository or UserRepository(session)
+        self._repository = repository
 
     def create_user(self, user: User) -> User:
         """Create a new user.
@@ -37,7 +29,7 @@ class UserService:
             The persisted user entity.
         """
         created_user = self._repository.create(user)
-        self._session.commit()
+        self._repository.commit()
 
         return created_user
 
@@ -56,4 +48,4 @@ class UserService:
     def delete_user(self, user: User) -> None:
         """Delete a user."""
         self._repository.delete(user)
-        self._session.commit()
+        self._repository.commit()
