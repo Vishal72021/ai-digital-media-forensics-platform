@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI
 
+from app.api.exceptions import register_exception_handlers
 from app.api.router import api_router
 from app.core.lifespan import lifespan
 from app.core.logging import configure_logging
@@ -25,6 +26,8 @@ def create_application() -> FastAPI:
         version=APPLICATION_VERSION,
         lifespan=lifespan,
     )
+
+    register_exception_handlers(application)
 
     application.include_router(api_router)
 
