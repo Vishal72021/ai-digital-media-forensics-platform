@@ -21,16 +21,6 @@ class CreateUserRequest(BaseSchema):
     )
 
 
-class UpdateUserRequest(BaseSchema):
-    """Request schema for updating a user."""
-
-    email: EmailStr | None = Field(
-        default=None,
-        description="Updated user email address.",
-        max_length=320,
-    )
-
-
 class UserSummary(IdentifierSchema):
     """Compact user representation."""
 

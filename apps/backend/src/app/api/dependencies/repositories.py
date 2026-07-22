@@ -21,3 +21,9 @@ def get_user_repository(
         User repository bound to the current database session.
     """
     return UserRepository(session)
+
+
+UserRepositoryDependency = Annotated[
+    UserRepository,
+    Depends(get_user_repository),
+]

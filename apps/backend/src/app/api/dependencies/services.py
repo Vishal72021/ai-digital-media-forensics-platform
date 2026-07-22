@@ -21,3 +21,9 @@ def get_user_service(
         User service configured with its repository dependency.
     """
     return UserService(repository)
+
+
+UserServiceDependency = Annotated[
+    UserService,
+    Depends(get_user_service),
+]

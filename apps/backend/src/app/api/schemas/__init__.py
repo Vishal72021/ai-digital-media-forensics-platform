@@ -7,7 +7,6 @@ from app.api.schemas.common import (
 )
 from app.api.schemas.user import (
     CreateUserRequest,
-    UpdateUserRequest,
     UserResponse,
     UserSummary,
 )
@@ -17,7 +16,6 @@ __all__ = [
     "IdentifierSchema",
     "TimestampSchema",
     "CreateUserRequest",
-    "UpdateUserRequest",
     "UserResponse",
     "UserSummary",
 ]
