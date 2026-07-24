@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from http import HTTPStatus
 
+from pydantic import AnyUrl
+
 from app.api.schemas.errors import ProblemDetails
 from app.domain.exceptions import (
     ConflictException,
@@ -44,7 +46,7 @@ def map_exception(exception: DomainException) -> ProblemDetails:
             problem_type = "internal-server-error"
 
     return ProblemDetails(
-        type=f"https://api.sentinelai.dev/problems/{problem_type}",
+        type=AnyUrl(f"https://api.sentinelai.dev/problems/{problem_type}"),
         title=title,
         status=status.value,
         detail=str(exception),
@@ -55,7 +57,7 @@ def map_unhandled_exception(_: Exception) -> ProblemDetails:
     """Map an unexpected exception to a generic problem details schema."""
 
     return ProblemDetails(
-        type="about:blank",
+        type=AnyUrl("about:blank"),
         title="Internal Server Error",
         status=HTTPStatus.INTERNAL_SERVER_ERROR.value,
         detail="An unexpected error occurred.",

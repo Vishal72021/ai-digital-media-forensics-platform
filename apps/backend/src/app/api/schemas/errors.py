@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pydantic import Field, HttpUrl
+from pydantic import AnyUrl, Field
 
 from app.api.schemas.common import BaseSchema
 
@@ -10,7 +10,7 @@ from app.api.schemas.common import BaseSchema
 class ProblemDetails(BaseSchema):
     """RFC 9457 Problem Details."""
 
-    type: HttpUrl = Field(
+    type: AnyUrl = Field(
         description="URI identifying the problem type.",
     )
 
