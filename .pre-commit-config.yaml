@@ -37,29 +37,29 @@ repos:
   # ---------------------------------------------------------------------------
   # Backend Python quality gates
   #
-  # These hooks intentionally execute through the backend uv environment so
-  # local development, pre-commit, and CI use the same locked toolchain and
-  # application dependencies.
+  # Backend tooling executes with apps/backend as its working directory.
+  # This guarantees that local development, pre-commit, and CI resolve the
+  # same pyproject.toml, uv.lock, source roots, and tool configuration.
   # ---------------------------------------------------------------------------
   - repo: local
     hooks:
       - id: backend-ruff-check
         name: backend ruff check
-        entry: uv run --project apps/backend ruff check --config apps/backend/pyproject.toml apps/backend --fix
+        entry: uv run --directory apps/backend ruff check . --fix
         language: system
         pass_filenames: false
         files: ^apps/backend/.*\.py$
 
       - id: backend-ruff-format
         name: backend ruff format
-        entry: uv run --project apps/backend ruff format --config apps/backend/pyproject.toml apps/backend --check
+        entry: uv run --directory apps/backend ruff format . --check
         language: system
         pass_filenames: false
         files: ^apps/backend/.*\.py$
 
       - id: backend-mypy
         name: backend mypy
-        entry: uv run --project apps/backend mypy --config-file apps/backend/pyproject.toml apps/backend/src
+        entry: uv run --directory apps/backend mypy src
         language: system
         pass_filenames: false
         files: ^apps/backend/.*\.py$
