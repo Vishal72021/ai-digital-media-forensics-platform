@@ -10,6 +10,7 @@ from app.domain.exceptions import (
 )
 from app.models.user import User
 from app.repositories.user import UserRepository
+from app.services.models import UserPage
 
 
 class UserService:
@@ -82,21 +83,29 @@ class UserService:
         *,
         page: int,
         page_size: int,
-    ) -> list[User]:
-        """Return a paginated list of users.
+    ) -> UserPage:
+        """Return a paginated collection of users.
 
         Args:
-            offset: Number of users to skip.
-            limit: Maximum number of users to return.
+            page: One-based page number.
+            page_size: Maximum number of users per page.
 
         Returns:
-            Paginated list of users.
+            Paginated user collection.
         """
         offset = (page - 1) * page_size
 
-        return self._repository.list(
+        users = self._repository.list(
             offset=offset,
             limit=page_size,
+        )
+        total_items = self._repository.count()
+
+        return UserPage(
+            items=users,
+            total_items=total_items,
+            page=page,
+            page_size=page_size,
         )
 
     def delete_user(self, user_id: UUID) -> None:
