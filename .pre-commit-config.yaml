@@ -35,21 +35,31 @@ repos:
           - "--maxkb=1024"
 
   # ---------------------------------------------------------------------------
-  # Ruff
+  # Backend Python quality gates
+  #
+  # Backend tooling executes with apps/backend as its working directory.
+  # This guarantees that local development, pre-commit, and CI resolve the
+  # same pyproject.toml, uv.lock, source roots, and tool configuration.
   # ---------------------------------------------------------------------------
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.4
+  - repo: local
     hooks:
-      - id: ruff
-        args:
-          - --fix
+      - id: backend-ruff-check
+        name: backend ruff check
+        entry: uv run --directory apps/backend ruff check . --fix
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$
 
-      - id: ruff-format
+      - id: backend-ruff-format
+        name: backend ruff format
+        entry: uv run --directory apps/backend ruff format . --check
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$
 
-  # ---------------------------------------------------------------------------
-  # MyPy
-  # ---------------------------------------------------------------------------
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.17.0
-    hooks:
-      - id: mypy
+      - id: backend-mypy
+        name: backend mypy
+        entry: uv run --directory apps/backend mypy src
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$

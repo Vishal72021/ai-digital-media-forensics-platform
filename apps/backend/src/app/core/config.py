@@ -2,7 +2,6 @@
 
 from functools import lru_cache
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,7 +14,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    database_url: str = Field(validation_alias="DATABASE_URL")
+    database_url: str
 
 
 @lru_cache

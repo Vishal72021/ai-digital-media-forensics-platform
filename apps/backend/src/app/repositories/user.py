@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import cast
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.user import User
@@ -34,6 +34,7 @@ class UserRepository:
         self._session.add(user)
         self._session.flush()
         self._session.refresh(user)
+
         return user
 
     def get_by_id(self, user_id: UUID) -> User | None:
@@ -62,15 +63,36 @@ class UserRepository:
 
         return cast(User | None, self._session.scalar(statement))
 
-    def list(self) -> list[User]:
-        """Return all users.
+    def list(
+        self,
+        *,
+        offset: int,
+        limit: int,
+    ) -> list[User]:
+        """Return a paginated list of users.
+
+        Args:
+            offset: Number of users to skip.
+            limit: Maximum number of users to return.
 
         Returns:
-            List of users.
+            Paginated list of users ordered by creation time.
         """
-        statement = select(User).order_by(User.created_at)
+        statement = select(User).order_by(User.created_at).offset(offset).limit(limit)
 
         return cast(list[User], list(self._session.scalars(statement)))
+
+    def count(self) -> int:
+        """Return the total number of users.
+
+        Returns:
+            Total number of persisted users.
+        """
+        statement = select(func.count()).select_from(User)
+
+        result = self._session.scalar(statement)
+
+        return 0 if result is None else result
 
     def delete(self, user: User) -> None:
         """Mark a user for deletion.
@@ -79,4 +101,16 @@ class UserRepository:
             user: User entity to delete.
         """
         self._session.delete(user)
+        self._session.flush()
+
+    def commit(self) -> None:
+        """Commit the current transaction."""
+        self._session.commit()
+
+    def rollback(self) -> None:
+        """Roll back the current transaction."""
+        self._session.rollback()
+
+    def flush(self) -> None:
+        """Flush pending changes to the database."""
         self._session.flush()
