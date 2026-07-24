@@ -35,21 +35,31 @@ repos:
           - "--maxkb=1024"
 
   # ---------------------------------------------------------------------------
-  # Ruff
+  # Backend Python quality gates
+  #
+  # These hooks intentionally execute through the backend uv environment so
+  # local development, pre-commit, and CI use the same locked toolchain and
+  # application dependencies.
   # ---------------------------------------------------------------------------
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.4
+  - repo: local
     hooks:
-      - id: ruff
-        args:
-          - --fix
+      - id: backend-ruff-check
+        name: backend ruff check
+        entry: uv run --project apps/backend ruff check --config apps/backend/pyproject.toml apps/backend --fix
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$
 
-      - id: ruff-format
+      - id: backend-ruff-format
+        name: backend ruff format
+        entry: uv run --project apps/backend ruff format --config apps/backend/pyproject.toml apps/backend --check
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$
 
-  # ---------------------------------------------------------------------------
-  # MyPy
-  # ---------------------------------------------------------------------------
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.17.0
-    hooks:
-      - id: mypy
+      - id: backend-mypy
+        name: backend mypy
+        entry: uv run --project apps/backend mypy --config-file apps/backend/pyproject.toml apps/backend/src
+        language: system
+        pass_filenames: false
+        files: ^apps/backend/.*\.py$
