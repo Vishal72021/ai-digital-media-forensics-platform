@@ -4,7 +4,11 @@
 
 **Wave:** 3
 
-**Status:** Planned
+**Status:** Complete
+
+**Release:** v0.3.0
+
+**Completed:** 2026-07-25
 
 **Prerequisite:** Wave 2 Complete (Persistence Foundation)
 
@@ -17,6 +21,28 @@ Wave 3 transitions Sentinel AI from infrastructure development to application de
 With the backend architecture established during Wave 2, this wave focuses on exposing application capabilities through APIs, strengthening dependency management, improving validation, and establishing the foundation for authentication and testing.
 
 The objective is to make the backend usable by client applications while preserving the architectural principles established in previous waves.
+
+---
+
+## Scope Finalization
+
+During Wave 3 architecture review, the milestone scope was refined to focus exclusively on the API Foundation.
+
+Authentication and authorization were separated into **Wave 4 – v0.4.0** to preserve clear architectural boundaries and avoid coupling API foundation work with security infrastructure.
+
+Automated testing infrastructure was also deferred from the original Wave 3 proposal and is not part of the v0.3.0 release scope.
+
+The finalized Wave 3 scope consists of:
+
+- Dependency injection
+- API schemas and validation
+- Centralized exception handling
+- User service behavior
+- Repository pagination
+- User lifecycle API endpoints
+- Router integration
+- OpenAPI validation
+- Final integration validation
 
 ---
 
@@ -114,57 +140,61 @@ Expected deliverables:
 
 ---
 
-# Proposed Stories
+# Delivered Stories
 
-## W3-S1
-
-Dependency Injection Foundation
-
-Deliverables
+## W3-S1 – Dependency Injection Foundation
 
 - Database dependency
-- Service dependency
 - Repository dependency
+- Service dependency
 - FastAPI dependency wiring
 
----
+## W3-S2 – API Schemas Foundation
 
-## W3-S2
-
-Request & Response Schemas
-
-Deliverables
-
+- Shared schema conventions
 - User request schemas
 - User response schemas
-- Validation models
-- Serialization conventions
+- Pagination schemas
+- Serialization and validation conventions
 
----
+## W3-S3 – Exception Handling Framework
 
-## W3-S3
+- Domain exception hierarchy
+- API exception mapping
+- Centralized exception handlers
+- Consistent problem-detail responses
 
-User API
+## W3-S4 – User API Foundation
 
-Deliverables
+### Package A – Service Behavior
 
-- Create User endpoint
-- Get User endpoint
-- List Users endpoint
-- Delete User endpoint
+- User service business behavior
+- Domain exception translation
+- Transaction handling
 
----
+### Package B – Repository Pagination
 
-## W3-S4
+- Offset/limit repository pagination
+- Service pagination orchestration
+- Pagination metadata
 
-Authentication Foundation
+### Package C – User API (Create & Retrieve)
 
-Deliverables
+- Create user endpoint
+- Retrieve user endpoint
 
-- Password hashing
-- Registration service
-- Login service
-- Authentication utilities
+### Package D – User API (List & Delete)
+
+- Paginated user listing endpoint
+- User deletion endpoint
+
+### Package E – Integration & Validation
+
+- API router integration
+- OpenAPI validation
+- Swagger UI validation
+- Complete user lifecycle validation
+- Final quality-gate validation
 
 ---
 
@@ -207,6 +237,15 @@ The following items remain outside the scope of Wave 3:
 - Distributed task queues
 
 These capabilities belong to later milestones.
+
+## Deferred to Wave 4
+
+- Authentication
+- Authorization
+- Password hashing
+- Registration workflow
+- Login workflow
+- Security utilities
 
 ---
 

@@ -10,12 +10,67 @@ The project follows a milestone-based development process where each release rep
 
 ### Planned
 
-- Wave 3 – Application Foundation
-- Dependency Injection
-- REST API
-- Request & Response Validation
-- Authentication Foundation
-- Automated Testing Infrastructure
+- Wave 4 – Authentication & Authorization
+
+---
+
+## [v0.3.0] - 2026-07-25
+
+### Milestone
+
+**Wave 3 – API Foundation**
+
+### Added
+
+- FastAPI dependency injection foundation
+- Request-scoped database session dependencies
+- Repository and service dependency providers
+- Shared API schema conventions
+- User request and response schemas
+- Pagination schemas and metadata
+- Domain exception hierarchy
+- Centralized API exception mapping and handling
+- User creation endpoint
+- User retrieval endpoint
+- Paginated user listing endpoint
+- User deletion endpoint
+- Repository pagination support
+- Service-layer pagination behavior
+- Versioned user API router integration
+
+### Engineering
+
+- Strictly typed dependency boundaries
+- Typed service pagination model
+- Consistent API problem-detail responses
+- Backend-local Ruff and MyPy configuration
+- Pydantic MyPy integration
+- Runtime email validation support
+- Repository-wide pre-commit integration with the backend environment
+- Python 3.13 backend toolchain alignment
+- Reproducible backend dependency locking
+
+### Validation
+
+- User create lifecycle validated
+- User retrieval lifecycle validated
+- User listing and pagination validated
+- User deletion lifecycle validated
+- API error behavior validated
+- OpenAPI schema validated
+- Swagger UI endpoints validated
+- Ruff linting passed
+- Ruff formatting passed
+- Strict MyPy validation passed
+- Pre-commit quality gates passed
+- Lockfile consistency validation passed
+- Post-merge integration gate passed
+
+### Documentation
+
+- Wave 3 Engineering Review
+- Updated Wave 3 Roadmap
+- Wave 4 scope established as Authentication & Authorization
 
 ---
 
