@@ -49,3 +49,8 @@ class User(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
+    email_verified_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
