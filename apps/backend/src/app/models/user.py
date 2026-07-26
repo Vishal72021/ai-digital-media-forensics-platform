@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
+from app.domain.security import AccountStatus
 
 
 class User(Base):
@@ -28,6 +29,12 @@ class User(Base):
         unique=True,
         nullable=False,
         index=True,
+    )
+
+    account_status: Mapped[AccountStatus] = mapped_column(
+        String(32),
+        default=AccountStatus.ACTIVE,
+        nullable=False,
     )
 
     created_at: Mapped[datetime] = mapped_column(
