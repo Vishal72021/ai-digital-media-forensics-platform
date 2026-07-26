@@ -96,21 +96,44 @@ The focus shifts from infrastructure to application capabilities.
 
 ---
 
-## Wave 4 — Authentication & Security
+## Wave 4 — Authentication & Authorization
 
-**Status:** Planned
+**Status:** In Progress
+
+**Release:** v0.4.0
+
+**Architecture:** W4-S0C Complete / Frozen
+
+**Next:** W4-S0D — Implementation Planning & Decomposition
 
 ### Objectives
 
-- User Registration
-- Login
-- JWT Authentication
-- Authorization
-- Role-Based Access Control
-- Security Middleware
+- Security Domain & Authenticated Principal
+- Credential & Password Security
+- Access Token & Stateful Refresh Sessions
+- Secure Browser Authentication Transport
+- Roles, Permissions & Authorization Policy
+- Security Persistence & Migrations
+- Authentication API
+- Password Recovery & Email Verification
+- Abuse Protection & Security Observability
+- Security Verification & Release Gates
+
+### Architecture Baseline
+
+Wave 4 implementation is governed by the accepted security architecture defined in ADR-0004 through ADR-0011.
+
+The architecture is frozen. Material implementation changes that conflict with accepted security invariants require formal architecture review.
+
+### Current Progress
+
+- W4-S0B — Authentication & Authorization Requirements: Complete / Frozen
+- W4-S0C — Authentication & Authorization Architecture: Complete / Frozen
+- W4-S0D — Implementation Planning & Decomposition: Next
+- Wave 4 Implementation: Not Started
+- v0.4.0 Release: Not Released
 
 ---
-
 ## Wave 5 — Media Management
 
 **Status:** Planned
