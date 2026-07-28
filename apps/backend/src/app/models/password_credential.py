@@ -1,22 +1,21 @@
-"""User domain model."""
+"""Password credential persistence model."""
 
 from __future__ import annotations
 
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, func
+from sqlalchemy import DateTime, ForeignKey, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-from app.domain.security import AccountStatus
 
 
-class User(Base):
-    """Represents a platform user."""
+class PasswordCredential(Base):
+    """Represents the current password credential for a platform user."""
 
-    __tablename__ = "users"
+    __tablename__ = "password_credentials"
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -24,16 +23,16 @@ class User(Base):
         default=uuid.uuid4,
     )
 
-    email: Mapped[str] = mapped_column(
-        String(320),
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
         unique=True,
         nullable=False,
         index=True,
     )
 
-    account_status: Mapped[AccountStatus] = mapped_column(
-        String(32),
-        default=AccountStatus.ACTIVE,
+    password_hash: Mapped[str] = mapped_column(
+        Text,
         nullable=False,
     )
 
@@ -48,9 +47,4 @@ class User(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
-    )
-
-    email_verified_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True),
-        nullable=True,
     )

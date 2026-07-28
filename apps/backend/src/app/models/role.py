@@ -1,22 +1,21 @@
-"""User domain model."""
+"""Role persistence model."""
 
 from __future__ import annotations
 
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, func
+from sqlalchemy import DateTime, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-from app.domain.security import AccountStatus
 
 
-class User(Base):
-    """Represents a platform user."""
+class Role(Base):
+    """Represents a server-owned authorization role."""
 
-    __tablename__ = "users"
+    __tablename__ = "roles"
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -24,17 +23,15 @@ class User(Base):
         default=uuid.uuid4,
     )
 
-    email: Mapped[str] = mapped_column(
-        String(320),
+    name: Mapped[str] = mapped_column(
+        String(100),
         unique=True,
         nullable=False,
-        index=True,
     )
 
-    account_status: Mapped[AccountStatus] = mapped_column(
-        String(32),
-        default=AccountStatus.ACTIVE,
-        nullable=False,
+    description: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -48,9 +45,4 @@ class User(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
-    )
-
-    email_verified_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True),
-        nullable=True,
     )
