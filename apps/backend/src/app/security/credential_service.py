@@ -57,6 +57,7 @@ class CredentialService:
         credential = self._repository.get_by_user_id(user_id)
 
         if credential is None:
+            self._password_hasher.verify_dummy(password)
             return False
 
         return self._password_hasher.verify(

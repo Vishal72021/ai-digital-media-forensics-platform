@@ -4,6 +4,12 @@ from argon2 import PasswordHasher as Argon2PasswordHasher
 from argon2.exceptions import InvalidHashError, VerificationError
 from argon2.low_level import Type
 
+DUMMY_PASSWORD_HASH = (
+    "$argon2id$v=19$m=65536,t=3,p=4$"
+    "R8GiNKBFzpaGqu6k3MEtDg$"
+    "5DO0mwGnLxc19yXs8sBmEdTWOkhRZi2aQQE2APxHgBA"
+)
+
 
 class PasswordHasher:
     """Hash and verify passwords using the approved Argon2id algorithm."""
@@ -22,6 +28,14 @@ class PasswordHasher:
             Argon2id encoded password hash.
         """
         return self._hasher.hash(password)
+
+    def verify_dummy(self, password: str) -> None:
+        """Perform password verification work against a non-user credential.
+
+        Args:
+            password: Supplied plaintext password material.
+        """
+        self.verify(password, DUMMY_PASSWORD_HASH)
 
     def verify(self, password: str, encoded_hash: str) -> bool:
         """Verify plaintext password material against an encoded hash.

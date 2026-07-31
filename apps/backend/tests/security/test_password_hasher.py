@@ -2,7 +2,7 @@
 
 from argon2 import PasswordHasher as Argon2PasswordHasher
 
-from app.security.password_hasher import PasswordHasher
+from app.security.password_hasher import DUMMY_PASSWORD_HASH, PasswordHasher
 
 
 def test_password_hasher_returns_encoded_hash() -> None:
@@ -151,3 +151,21 @@ def test_verification_does_not_replace_encoded_hash() -> None:
 
     assert hasher.verify(password, encoded_hash) is True
     assert encoded_hash == original_hash
+
+
+def test_dummy_password_hash_is_valid_argon2id() -> None:
+    """The anti-enumeration fixture is a valid Argon2id encoded hash."""
+
+    assert DUMMY_PASSWORD_HASH.startswith("$argon2id$")
+    assert PasswordHasher().verify(
+        "sentinel-ai-dummy-credential-material",
+        DUMMY_PASSWORD_HASH,
+    )
+
+
+def test_verify_dummy_performs_verification_without_returning_authentication_result() -> None:
+    """Dummy verification performs password work without producing authentication success."""
+
+    result = PasswordHasher().verify_dummy("supplied password material")
+
+    assert result is None

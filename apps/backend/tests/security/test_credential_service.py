@@ -115,3 +115,49 @@ def test_verify_returns_false_when_credential_does_not_exist() -> None:
 
     assert service.verify(user_id, "correct horse battery staple") is False
     repository.get_by_user_id.assert_called_once_with(user_id)
+
+
+def test_verify_performs_dummy_verification_when_credential_is_missing() -> None:
+    """Missing credentials still perform password verification work."""
+
+    repository = Mock(spec=CredentialRepository)
+    repository.get_by_user_id.return_value = None
+
+    password_hasher = Mock(spec=PasswordHasher)
+
+    service = CredentialService(
+        repository=repository,
+        password_policy=PasswordPolicy(),
+        password_hasher=password_hasher,
+    )
+
+    service.verify(uuid.uuid4(), "supplied password")
+
+    password_hasher.verify_dummy.assert_called_once_with(
+        "supplied password",
+    )
+
+
+def test_verify_does_not_perform_dummy_verification_when_credential_exists() -> None:
+    """Dummy verification is skipped when a credential exists."""
+
+    user_id = uuid.uuid4()
+
+    repository = Mock(spec=CredentialRepository)
+    repository.get_by_user_id.return_value = PasswordCredential(
+        user_id=user_id,
+        password_hash=PasswordHasher().hash("correct horse battery staple"),
+    )
+
+    password_hasher = Mock(spec=PasswordHasher)
+    password_hasher.verify.return_value = True
+
+    service = CredentialService(
+        repository=repository,
+        password_policy=PasswordPolicy(),
+        password_hasher=password_hasher,
+    )
+
+    assert service.verify(user_id, "correct horse battery staple")
+
+    password_hasher.verify_dummy.assert_not_called()
