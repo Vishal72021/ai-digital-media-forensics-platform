@@ -4,19 +4,31 @@ from argon2 import PasswordHasher as Argon2PasswordHasher
 from argon2.exceptions import InvalidHashError, VerificationError
 from argon2.low_level import Type
 
-DUMMY_PASSWORD_HASH = (
-    "$argon2id$v=19$m=65536,t=3,p=4$"
-    "R8GiNKBFzpaGqu6k3MEtDg$"
-    "5DO0mwGnLxc19yXs8sBmEdTWOkhRZi2aQQE2APxHgBA"
-)
+_DUMMY_PASSWORD = "sentinel-ai-internal-dummy-credential"
 
 
 class PasswordHasher:
     """Hash and verify passwords using the approved Argon2id algorithm."""
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        time_cost: int = 3,
+        memory_cost: int = 65536,
+        parallelism: int = 4,
+        hash_len: int = 32,
+        salt_len: int = 16,
+    ) -> None:
         """Initialize the Argon2id password hasher."""
-        self._hasher = Argon2PasswordHasher(type=Type.ID)
+        self._hasher = Argon2PasswordHasher(
+            time_cost=time_cost,
+            memory_cost=memory_cost,
+            parallelism=parallelism,
+            hash_len=hash_len,
+            salt_len=salt_len,
+            type=Type.ID,
+        )
+        self._dummy_password_hash = self._hasher.hash(_DUMMY_PASSWORD)
 
     def hash(self, password: str) -> str:
         """Hash a plaintext password.
@@ -35,7 +47,7 @@ class PasswordHasher:
         Args:
             password: Supplied plaintext password material.
         """
-        self.verify(password, DUMMY_PASSWORD_HASH)
+        self.verify(password, self._dummy_password_hash)
 
     def verify(self, password: str, encoded_hash: str) -> bool:
         """Verify plaintext password material against an encoded hash.
