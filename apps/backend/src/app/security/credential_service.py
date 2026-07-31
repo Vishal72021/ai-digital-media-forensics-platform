@@ -64,3 +64,24 @@ class CredentialService:
             password,
             credential.password_hash,
         )
+
+    def replace(self, user_id: UUID, password: str) -> bool:
+        """Replace an existing password credential.
+
+        Args:
+            user_id: Identifier of the user whose credential is replaced.
+            password: Candidate plaintext password.
+
+        Returns:
+            True when an existing credential is replaced; otherwise False.
+        """
+        credential = self._repository.get_by_user_id(user_id)
+
+        if credential is None:
+            return False
+
+        self._password_policy.validate(password)
+
+        credential.password_hash = self._password_hasher.hash(password)
+
+        return True

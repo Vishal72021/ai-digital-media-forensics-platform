@@ -161,3 +161,67 @@ def test_verify_does_not_perform_dummy_verification_when_credential_exists() -> 
     assert service.verify(user_id, "correct horse battery staple")
 
     password_hasher.verify_dummy.assert_not_called()
+
+
+def test_replace_updates_existing_password_hash() -> None:
+    """Replacing a credential updates the stored password hash."""
+
+    user_id = uuid.uuid4()
+
+    old_password = "correct horse battery staple"
+    new_password = "new correct horse battery staple"
+
+    credential = PasswordCredential(
+        user_id=user_id,
+        password_hash=PasswordHasher().hash(old_password),
+    )
+
+    repository = Mock(spec=CredentialRepository)
+    repository.get_by_user_id.return_value = credential
+
+    service = _build_service(repository)
+
+    assert service.replace(user_id, new_password) is True
+
+    hasher = PasswordHasher()
+
+    assert hasher.verify(new_password, credential.password_hash)
+    assert not hasher.verify(old_password, credential.password_hash)
+
+
+def test_replace_returns_false_when_credential_missing() -> None:
+    """Replacing a missing credential returns False."""
+
+    repository = Mock(spec=CredentialRepository)
+    repository.get_by_user_id.return_value = None
+
+    service = _build_service(repository)
+
+    assert service.replace(uuid.uuid4(), "correct horse battery staple") is False
+
+    repository.get_by_user_id.assert_called_once()
+
+
+def test_replace_rejects_invalid_password() -> None:
+    """Replacement enforces the canonical password policy."""
+
+    user_id = uuid.uuid4()
+
+    original_hash = PasswordHasher().hash(
+        "correct horse battery staple",
+    )
+
+    credential = PasswordCredential(
+        user_id=user_id,
+        password_hash=original_hash,
+    )
+
+    repository = Mock(spec=CredentialRepository)
+    repository.get_by_user_id.return_value = credential
+
+    service = _build_service(repository)
+
+    with pytest.raises(PasswordPolicyViolation):
+        service.replace(user_id, "short")
+
+    assert credential.password_hash == original_hash
