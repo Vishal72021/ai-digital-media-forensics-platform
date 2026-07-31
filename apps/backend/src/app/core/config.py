@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 
+from pydantic import PositiveInt
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,6 +16,12 @@ class Settings(BaseSettings):
     )
 
     database_url: str
+
+    password_hash_time_cost: PositiveInt = 3
+    password_hash_memory_cost: PositiveInt = 65536
+    password_hash_parallelism: PositiveInt = 4
+    password_hash_hash_len: PositiveInt = 32
+    password_hash_salt_len: PositiveInt = 16
 
 
 @lru_cache
