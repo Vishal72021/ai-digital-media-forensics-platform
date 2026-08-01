@@ -12,7 +12,11 @@ from app.domain.exceptions.database import (
     DatabaseConnectionException,
     DatabaseTransactionException,
 )
-from app.domain.exceptions.security import PasswordPolicyViolation
+from app.domain.exceptions.security import (
+    AuthenticationException,
+    InvalidCredentialsException,
+    PasswordPolicyViolation,
+)
 from app.domain.exceptions.users import (
     DuplicateEmailException,
     UserNotFoundException,
@@ -29,5 +33,7 @@ __all__ = [
     "ValidationException",
     "DatabaseConnectionException",
     "DatabaseTransactionException",
+    "AuthenticationException",
+    "InvalidCredentialsException",
     "PasswordPolicyViolation",
 ]
