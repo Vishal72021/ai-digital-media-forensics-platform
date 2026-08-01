@@ -42,10 +42,7 @@ class UserService:
         if existing_user is not None:
             raise DuplicateEmailException(user.email)
 
-        created_user = self._repository.create(user)
-        self._repository.commit()
-
-        return created_user
+        return self._repository.create(user)
 
     def get_user(self, user_id: UUID) -> User:
         """Retrieve a user by identifier.
@@ -121,4 +118,3 @@ class UserService:
         user = self.get_user(user_id)
 
         self._repository.delete(user)
-        self._repository.commit()
