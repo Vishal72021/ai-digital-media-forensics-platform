@@ -1,6 +1,22 @@
 """Security domain exceptions."""
 
-from app.domain.exceptions.base import ValidationException
+from __future__ import annotations
+
+from app.domain.exceptions.base import (
+    BusinessRuleException,
+    ValidationException,
+)
+
+
+class AuthenticationException(BusinessRuleException):
+    """Base class for authentication domain failures."""
+
+
+class InvalidCredentialsException(AuthenticationException):
+    """Raised when supplied authentication credentials are invalid."""
+
+    def __init__(self) -> None:
+        super().__init__("The supplied credentials are invalid.")
 
 
 class PasswordPolicyViolation(ValidationException):
